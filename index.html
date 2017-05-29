@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Element UI</title>
+
+    <!-- Element UI import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
+
+    <!-- Vue JS -->
+    <script src="https://unpkg.com/vue"></script>
+
+    <!-- Element UI import JavaScript -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- English version of Element JS -->
+    <script src="https://unpkg.com/element-ui/lib/umd/locale/en.js"></script>
+
+
+    <!-- Open Sans Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800" rel="stylesheet">
+
+    <!-- Custom Css -->
+    <style media="screen">
+        html,
+        body {
+            background-color: #eee;
+            font-family: 'Open Sans', sans-serif;
+        }
+        
+        h2 {
+            font-weight: 700;
+        }
+
+        .el-select{
+        	width: 100%;
+        }
+        
+        .card {
+            width: 700px;
+            margin: auto;
+            box-shadow: 5px 5px 10px #aaa;
+        }
+
+        .card-header{
+        	background-color: #20A0FF;
+        	color: #fff;
+        	height: 100px;
+        	padding: 3% 0 0 0;
+        	border-top-left-radius: 3px;
+        	border-top-right-radius: 3px;
+        }
+
+        .card-content{
+        	background-color: #fff;
+        	padding: 40px;
+        	border-bottom-left-radius: 3px;
+        	border-bottom-right-radius: 3px;
+        }
+
+        @media(max-width: 720px){
+        	.card{
+        		width: 98%;
+        	}
+        }
+    </style>
+
+</head>
+
+<body>
+
+	<!-- Main App -->
+    <div id="app" class="card">
+
+    	<div class="card-header">
+    		<h2 align="center">Element UI Form</h2>	
+    	</div>
+
+    	<div class="card-content">
+    		<el-form :model="form" :rules="rules" ref="form" label-width="120px" class="demo-ruleForm">
+	        	<!-- Input Text Name -->
+	            <el-form-item label="Full Name" prop="name">
+	                <el-input v-model="form.name"></el-input>
+	            </el-form-item>
+
+	            <!-- Input Text Email -->
+	            <el-form-item label="Email" prop="email">
+	                <el-input type="text" v-model="form.email"></el-input>
+	            </el-form-item>
+
+	            <!-- Input Select feedback type -->
+	            <el-form-item label="Feedback Type" prop="type">
+	                <el-select v-model="form.type" placeholder="Please select your feedback type">
+	                    <el-option label="General Feedback" value="general"></el-option>
+	                    <el-option label="Improvements" value="improve"></el-option>
+	                    <el-option label="Bug Reports" value="bug"></el-option>
+	                    <el-option label="Support" value="support"></el-option>
+	                </el-select>
+	            </el-form-item>
+
+	            <!-- Input Date Purchased -->
+	            <el-form-item label="Purchase Date" prop="purchased">
+                    <el-date-picker type="date" placeholder="Pick a date" v-model="form.purchased" style="width: 100%;"></el-date-picker>
+	            </el-form-item>
+
+	            <!-- Input switch/toogle Activation -->
+	            <el-form-item label="Product Activated?">
+	                <el-switch on-text="Yes" off-text="No" v-model="form.activation"></el-switch>
+	            </el-form-item>
+
+	            <!-- Input checkbox best features -->
+	            <el-form-item label="Best feature">
+	                <el-checkbox-group v-model="form.best">
+	                    <el-checkbox label="UI/UX Design" name="type"></el-checkbox>
+	                    <el-checkbox label="Business Logic" name="type"></el-checkbox>
+	                    <el-checkbox label="Performance" name="type"></el-checkbox>
+	                    <el-checkbox label="Support" name="type"></el-checkbox>
+	                </el-checkbox-group>
+	            </el-form-item>
+
+	            <!-- Input radio product type -->
+	            <el-form-item label="Type of Product" prop="product">
+	                <el-radio-group v-model="form.product">
+	                    <el-radio label="Offline"></el-radio>
+	                    <el-radio label="Web Service"></el-radio>
+	                </el-radio-group>
+	            </el-form-item>
+
+	            <!-- Input slider rating -->
+	            <el-form-item label="Overall Rating">
+	                <el-slider v-model="form.overall" :max="10"></el-slider>
+	            </el-form-item>
+
+	            <!-- Input textarea description -->
+	            <el-form-item label="Feedback Details">
+	                <el-input type="textarea" v-model="form.desc" :autosize="{ minRows: 4}"></el-input>
+	            </el-form-item>
+
+	            <!-- Input file upload -->
+	            <el-form-item label="File Upload (Optional)">
+	                <el-upload class="upload-demo" action="http://faizansaiyed.ml/" :on-preview="handlePreview" :on-remove="handleRemove" :on-success="handleUpload" :file-list="form.fileList">
+	                    <el-button size="small" type="primary">Click to upload</el-button>
+	                    <div slot="tip" class="el-upload__tip">jpg/png files with a size less than 500kb</div>
+	                </el-upload>
+	            </el-form-item>
+
+	            <!-- Buttons -->
+	            <el-form-item>
+	                <el-button type="primary" @click="onSubmit('form')">Submit</el-button>
+	                <el-button @click="resetForm('form')">Reset</el-button>
+	            </el-form-item>
+	        </el-form>
+    	</div> <!-- card-content ends -->       
+        
+    </div> <!-- card ends -->
+    <!-- Main App Ends -->
+
+    <!-- Custom Javascript -->
+    <script type="text/javascript">
+    	
+    	// Default Element JS language is Chinese. Converting to english here.
+    	ELEMENT.locale(ELEMENT.lang.en);
+
+        var Main = {
+            data() {
+                    return {
+                        form: {
+                            name: '',
+                            type: '',
+                            purchased: '',
+                            activation: false,
+                            best: [],
+                            product: '',
+                            overall: 5,
+                            desc: '',
+                            fileList: []
+                        },
+                        rules: {
+				          name: [
+				            { required: true, message: 'Please input full name', trigger: 'blur' },
+				            { min: 1, max: 50, message: 'Length should be 2 to 50', trigger: 'blur' }
+				          ],
+				          email: [
+				            { type: 'email', required: true, message: 'Please enter email format (john@doe.com)', trigger: 'change' }
+				          ],
+				          purchased: [
+				            { type: 'date', required: true, message: 'Please pick a date', trigger: 'change' }
+				          ],
+				          type: [
+				            { required: true, message: 'Please select feedback type', trigger: 'change' }
+				          ],
+				          product: [
+				            { required: true, message: 'Please select product type', trigger: 'change' }
+				          ]
+				        }
+                    }
+                },
+                methods: {
+
+                	handleRemove(file, fileList) {
+                        console.log(file, fileList);
+                    },
+
+                    handlePreview(file) {
+                        console.log(file);
+                    },
+
+                    handleUpload(reponse, file, fileList) {
+                        // var fileData = '{ name: ' + file.name + ', size: ' + file.size + ', url: ' + file.url + '}';
+                        this.form.fileList.push(file);
+                        console.log(this.form.fileList);
+                    },
+
+                    onSubmit(formName) {
+
+                    	this.$refs[formName].validate((valid) => {
+				          if (valid) {
+				          	const h = this.$createElement;
+					            this.$msgbox({
+					            	title: 'Form Submitted!',
+					            	message: h('div', null, [
+							            h('p', null, 'Full Name: ' + this.form.name),
+							            h('p', null, 'Feedback Type: ' + this.form.type),
+							            h('p', null, 'Purchase Date: ' + this.form.purchased),
+							            h('p', null, 'Activation: ' + this.form.activation),
+							            h('p', null, 'Best Features: ' + this.form.best),
+							            h('p', null, 'Type of Product: ' + this.form.product),
+							            h('p', null, 'Rating: ' + this.form.overall),
+							            h('p', null, 'Details: ' + this.form.desc),
+							            h('p', null, 'Files: ' + this.form.fileList[0].name)
+						          	]),
+	                        		confirmButtonText: 'OK',
+									callback: action => {
+
+										// Reset form data
+										this.$refs[formName].resetFields();
+										this.form.fileList = [];
+
+										this.$message({
+										  type: 'info',
+										  message: 'Thanks for your valuable Feedback!'
+										});
+									}
+	                        	});
+					        } else {
+				            	this.$message.error('Please fill up the required fields.');
+					            return false;
+					        }
+				        });
+                    },
+
+                    resetForm(formName) {
+				        this.$refs[formName].resetFields();
+			      	}
+
+					// "Full Name: " + this.form.name +
+					// "Feedback Type: " + this.form.type +
+					// "Purchase Date: " + this.form.purchased +
+					// "Activation: " + this.form.activation +
+					// "Best Features" + this.form.best +
+					// "Type of Product" + this.form.product +
+					// "Rating: " + this.form.overall +
+					// "Details: " + this.form.desc +
+					// "Files: " + this.form.fileList
+
+                }
+        }
+        var Ctor = Vue.extend(Main)
+        new Ctor().$mount('#app')
+    </script>
+</body>
+
+</html>
